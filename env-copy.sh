@@ -31,6 +31,11 @@ flags() {
 
 flags "$@"
 
+if [ -z "$KEY" ]
+then
+  KEY="SERVICE_KEY"
+fi
+
 echo "Retrieving $KEY from $HOST:$PORT..."
 
 output=$(ssh -p "$PORT" "$HOST" -oStrictHostKeyChecking=accept-new  "bash -c 'env | grep $KEY'")
