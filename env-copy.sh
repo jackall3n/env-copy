@@ -61,7 +61,7 @@ run() {
 }
 
 echo "Connecting..."
-run "echo Connected"
+echo $(run "echo Connected")
 
 echo "Searching variables for '$KEY' from $HOST:$PORT..."
 
