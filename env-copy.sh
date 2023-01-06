@@ -101,7 +101,7 @@ echo "$value"
 
 # Print
 if [[ $DECODE == 1 ]]; then
-  value=$("$value" | base64 -d)
+  value=$(echo "$value" | base64 -d)
   echo "Decoded:"
   echo "$value"
 fi
