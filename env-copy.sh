@@ -60,9 +60,10 @@ run() {
   echo $(ssh -p "$PORT" "$HOST" -oStrictHostKeyChecking=accept-new "bash -c '$1'")
 }
 
-echo "Searching variables for '$KEY' from $HOST:$PORT..."
-
+echo "Connecting..."
 run "echo Connected"
+
+echo "Searching variables for '$KEY' from $HOST:$PORT..."
 
 keys=$(run "env | grep $KEY | cut -d '=' -f1")
 keys=($keys)
@@ -72,10 +73,10 @@ if [ ${#keys[@]} -eq 0 ]; then
     exit 0
 fi
 
-i=0
+i=-1
 for key in "${keys[@]}"; do
-  echo "$i: $key"
   i=$((i + 1))
+  echo "$i: $key"
 done
 
 read -p "Which key would you like? [0-9]: " -r key_index
