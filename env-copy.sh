@@ -86,25 +86,37 @@ if [ "$key_index" -gt $i ]; then
     exit 1
 fi
 
-echo "Printing... ${keys[$key_index]}"
+key=${keys[$key_index]}
 
-value=$(run "echo \$${keys[$key_index]}")
+echo "Printing... $key"
+
+value=$(run "echo \$$key")
+
+export TEST=$value
+
+value=$(echo "$value" | tr '\n' ' ')
 
 echo "Raw:"
 echo "$value"
 
 # Print
 if [[ $DECODE == 1 ]]; then
-  decoded=$("$value" | base64 -d)
+  value=$("$value" | base64 -d)
   echo "Decoded:"
-  echo "$decoded"
+  echo "$value"
 fi
 
 # Copy if possible
-if [[ $DECODE == 1 ]]; then
-  echo "$decoded" | pbcopy
-else
-  echo "$value" | pbcopy
-fi
+echo "$value" | pbcopy
 
-echo "Copied to clipboard!"
+project_id=$(jq '.project_id' <<< "$value")
+private_key_id=$(jq '.private_key_id' <<< "$value")
+client_email=$(jq '.client_email' <<< "$value")
+
+echo "key: $key"
+echo "client_email: $client_email"
+echo "project_id: $project_id"
+echo "private_key_id: $private_key_id"
+
+# Copy if possible
+echo "$key\t$client_email\t$project_id\t$private_key_id" | pbcopy
