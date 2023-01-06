@@ -60,22 +60,30 @@ run() {
   echo $(ssh -p "$PORT" "$HOST" -oStrictHostKeyChecking=accept-new "bash -c '$1'")
 }
 
-echo "Retrieving $KEY from $HOST:$PORT..."
+echo "Searching variables for '$KEY' from $HOST:$PORT..."
 
 run "echo Connected"
 
 keys=$(run "env | grep $KEY | cut -d '=' -f1")
-
 keys=($keys)
 
-i=0
+if [ ${#keys[@]} -eq 0 ]; then
+    echo "There are no keys matching '$KEY'"
+    exit 0
+fi
 
+i=0
 for key in "${keys[@]}"; do
   echo "$i: $key"
   i=$((i + 1))
 done
 
 read -p "Which key would you like? [0-9]: " -r key_index
+
+if [ "$key_index" -gt $i ]; then
+    echo "Invalid selection"
+    exit 1
+fi
 
 echo "Printing... ${keys[$key_index]}"
 
@@ -97,3 +105,5 @@ if [[ $DECODE == 1 ]]; then
 else
   echo "$value" | pbcopy
 fi
+
+echo "Copied to clipboard!"
