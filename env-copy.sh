@@ -28,7 +28,7 @@ flags() {
       ;;
     --help)
       shift
-      echo "env-copy -p <port> [host] -k <KEY_NAME>"
+      echo "env-copy -p <port> [host] -k <KEY_NAME> --decode"
       exit 0
       shift
       ;;
