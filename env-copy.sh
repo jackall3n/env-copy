@@ -84,7 +84,16 @@ value=$(run "echo \$${keys[$key_index]}")
 echo "Raw:"
 echo "$value"
 
+# Print
 if [[ $DECODE == 1 ]]; then
+  decoded=$("$value" | base64 -d)
   echo "Decoded:"
-  echo "$value" | base64 -d
+  echo "$decoded"
+fi
+
+# Copy if possible
+if [[ $DECODE == 1 ]]; then
+  echo "$decoded" | pbcopy
+else
+  echo "$value" | pbcopy
 fi
